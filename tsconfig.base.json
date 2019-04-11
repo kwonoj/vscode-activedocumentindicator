@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "suppressImplicitAnyIndexErrors": true,
+		"strictNullChecks": true,
+		"strict": true,
+    "noUnusedLocals": true,
+    "noImplicitThis": true,
+    "noUnusedParameters": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2017",
+    "outDir": ".tmp",
+    "lib": [
+      "es2017",
+      "dom"
+    ]
+  }
+}
