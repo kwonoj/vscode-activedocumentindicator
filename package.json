@@ -2,7 +2,17 @@
   "name": "vscode-activedocumentindicator",
   "displayName": "Active Document Indicator",
   "description": "Visual indicator to current active text document",
+  "publisher": "ojkwon",
+  "author": "OJ Kwon <kwon.ohjoong@gmail.com>",
+  "license": "MIT",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kwonoj/vscode-activedocumentindicator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kwonoj/vscode-activedocumentindicator/issues"
+  },
   "engines": {
     "vscode": "^1.33.0"
   },
@@ -12,6 +22,7 @@
   "activationEvents": [
     "*"
   ],
+  "icon": "icon.png",
   "main": "./dist/index.bundle.js",
   "contributes": {
     "configuration": {
@@ -23,7 +34,7 @@
         "activeDocumentIndicator.opacity": {
           "default": 50,
           "type": "number",
-          "description": "An integer between 0 and 100 used for the opacity percentage for non active pane"
+          "description": "An integer between 0 and 100 used for the opacity percentage for non active document"
         }
       }
     }
