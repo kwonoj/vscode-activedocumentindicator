@@ -1,27 +1,99 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
+import { ExtensionContext, window, Range, TextEditor, workspace, TextEditorDecorationType } from 'vscode';
+import { fromEventPattern } from 'rxjs';
+import { startWith, debounceTime, withLatestFrom, map, scan, filter } from 'rxjs/operators';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+/**
+ * Create new decorations for given opacity.
+ *
+ */
+const getOpacityDecoration = (raw: number) =>
+  window.createTextEditorDecorationType({
+    opacity: `${raw / 100}`
+  });
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-		console.log('Congratulations, your extension "active-indicator" is now active!');
+/**
+ * Returns full document's range.
+ * @param editor
+ */
+const getFullDocumentRange = (editor: TextEditor) => {
+  const invalidRange = new Range(0, 0, editor.document.lineCount /*intentionally missing the '-1' */, 0);
+  return editor.document.validateRange(invalidRange);
+};
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('extension.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World!');
-	});
-
-	context.subscriptions.push(disposable);
+interface IndicatorConfiguration {
+  enabled: boolean;
+  opacity: number;
 }
 
-// this method is called when your extension is deactivated
-export function deactivate() {}
+/**
+ * Read current configurations
+ */
+const getConfiguration = (): IndicatorConfiguration => {
+  const config = workspace.getConfiguration('activeDocumentIndicator');
+
+  return {
+    enabled: config.get('enabled', true),
+    opacity: config.get('opacity', 50)
+  };
+};
+
+/**
+ * Apply opacity decorations to non-active text editors, clear for active editor
+ * @param activeEditor
+ */
+const applyDecoration = ([activeEditor, config]: [
+  TextEditor | undefined,
+  { decoration: TextEditorDecorationType } | null
+]) => {
+  window.visibleTextEditors
+    .map(editor => ({ editor, ranges: editor === activeEditor ? [] : [getFullDocumentRange(editor)] }))
+    .forEach(({ editor, ranges }) => editor.setDecorations(config!.decoration, ranges));
+};
+
+/**
+ * Creates Observable to subscribe configuration change with intiial value. Each time config changes, disposes existing decorations then emit new decorations.
+ */
+const getConfigChangeObservable = () =>
+  fromEventPattern(workspace.onDidChangeConfiguration, (_h, subscription) => subscription.dispose()).pipe(
+    map(getConfiguration),
+    startWith(getConfiguration()),
+    scan(
+      (prev: IndicatorConfiguration & { decoration: TextEditorDecorationType } | null, cur: IndicatorConfiguration) => {
+        // Reset existing config based decorations
+        if (!!prev && prev.decoration) {
+          //applyDecoration([undefined, { decoration: prev.decoration }]);
+          prev.decoration.dispose();
+        }
+
+        return {
+          ...cur,
+          decoration: getOpacityDecoration(cur.opacity)
+        } as any;
+      },
+      null
+    )
+  );
+
+/**
+ * Creates Observable to subscribe active editor changes.
+ */
+const getEditorChangeObservable = () =>
+  fromEventPattern<TextEditor>(window.onDidChangeActiveTextEditor, (_h, subscription) => subscription.dispose());
+
+/**
+ * Activation extension
+ */
+const activate = (context: ExtensionContext) => {
+  const subscription = getEditorChangeObservable()
+    .pipe(
+      startWith(window.activeTextEditor),
+      withLatestFrom(getConfigChangeObservable()),
+      debounceTime(100),
+      filter(([, config]) => config!.enabled)
+    )
+    .subscribe(applyDecoration);
+
+  context.subscriptions.push({ dispose: subscription.unsubscribe.bind(subscription) });
+};
+
+export { activate };
