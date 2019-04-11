@@ -100,6 +100,8 @@ module.exports = {
   // client still works with same target config.
   target: 'node',
 
+  mode: isProduction ? 'production' : 'development',
+
   node: {
     __dirname: false,
     __filename: false
