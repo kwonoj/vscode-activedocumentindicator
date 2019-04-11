@@ -61,7 +61,6 @@ const getConfigChangeObservable = () =>
       (prev: IndicatorConfiguration & { decoration: TextEditorDecorationType } | null, cur: IndicatorConfiguration) => {
         // Reset existing config based decorations
         if (!!prev && prev.decoration) {
-          //applyDecoration([undefined, { decoration: prev.decoration }]);
           prev.decoration.dispose();
         }
 
