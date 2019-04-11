@@ -1,7 +1,7 @@
 {
-  "name": "vscode-activeindicator",
-  "displayName": "Active Indicator",
-  "description": "Visual indicator for focused pane",
+  "name": "vscode-activedocumentindicator",
+  "displayName": "Active Document Indicator",
+  "description": "Visual indicator to current active text document",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.33.0"
@@ -10,16 +10,23 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:extension.helloWorld"
+    "*"
   ],
   "main": "./dist/index.bundle.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "extension.helloWorld",
-        "title": "Hello World"
+    "configuration": {
+      "properties": {
+        "activeDocumentIndicator.enabled": {
+          "default": true,
+          "type": "boolean"
+        },
+        "activeDocumentIndicator.opacity": {
+          "default": 50,
+          "type": "number",
+          "description": "An integer between 0 and 100 used for the opacity percentage for non active pane"
+        }
       }
-    ]
+    }
   },
   "config": {
     "commitizen": {
@@ -81,5 +88,9 @@
       "pre-commit": "lint-staged",
       "pre-push": "npm-run-all build:test"
     }
+  },
+  "dependencies": {
+    "rxjs": "^6.4.0",
+    "tslib": "^1.9.3"
   }
 }
