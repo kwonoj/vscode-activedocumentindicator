@@ -102,10 +102,7 @@ module.exports = {
 
   mode: isProduction ? 'production' : 'development',
 
-  node: {
-    __dirname: false,
-    __filename: false
-  },
+  node: false,
 
   entry: {
     index: './src/index.ts'
