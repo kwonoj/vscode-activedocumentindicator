@@ -17,13 +17,12 @@ const baseOption = {
     path: path.resolve('./dist'),
     filename: '[name].bundle.js',
     chunkFilename: '[name].chunk.js',
-    library: '',
-    libraryTarget: 'commonjs',
-    devtoolModuleFilenameTemplate: '[absolute-resource-path]'
+    libraryTarget: 'commonjs2',
+    devtoolModuleFilenameTemplate: '[absolute-resource-path]',
   },
 
   resolve: {
-    extensions: ['.ts', '.js']
+    extensions: ['.ts', '.js'],
   },
 
   module: {
@@ -34,16 +33,16 @@ const baseOption = {
         loader: 'ts-loader',
         exclude: /node_modules/,
         options: {
-          transpileOnly: !isProduction
-        }
-      }
-    ]
+          transpileOnly: !isProduction,
+        },
+      },
+    ],
   },
 
   devtool: isProduction ? 'source-map' : 'eval-source-map',
 
   optimization: {
-    minimizer: [] as Array<any>
+    minimizer: [] as Array<any>,
   },
 
   externals: {
@@ -51,28 +50,28 @@ const baseOption = {
      * Client side externals
      */
     vscode: {
-      commonjs: 'vscode'
+      commonjs: 'vscode',
     },
     'vscode-languageclient': {
-      commonjs: 'vscode-languageclient'
+      commonjs: 'vscode-languageclient',
     },
 
     /**
      * Server side externals
      */
     'vscode-languageserver': {
-      commonjs: 'vscode-languageserver'
-    }
+      commonjs: 'vscode-languageserver',
+    },
   },
 
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify(nodeEnv)
+        NODE_ENV: JSON.stringify(nodeEnv),
       },
-      isProduction
-    })
-  ]
+      isProduction,
+    }),
+  ],
 };
 
 /**
@@ -80,11 +79,7 @@ const baseOption = {
  *
  */
 if (isProduction) {
-  baseOption.optimization.minimizer.push(
-    new terserPlugin({
-      sourceMap: true
-    })
-  );
+  baseOption.optimization.minimizer.push(new terserPlugin({}));
 }
 
 /**
@@ -105,6 +100,6 @@ module.exports = {
   node: false,
 
   entry: {
-    index: './src/index.ts'
-  }
+    index: './src/index.ts',
+  },
 };

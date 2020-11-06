@@ -12,7 +12,6 @@
     "noImplicitThis": true,
     "noUnusedParameters": true,
     "moduleResolution": "node",
-    "importHelpers": true,
     "target": "es2017",
     "outDir": ".tmp",
     "lib": [
