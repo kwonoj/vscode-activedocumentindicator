@@ -17,7 +17,7 @@ const baseOption = {
     path: path.resolve('./dist'),
     filename: '[name].bundle.js',
     chunkFilename: '[name].chunk.js',
-    libraryTarget: 'commonjs2',
+    libraryTarget: 'commonjs',
     devtoolModuleFilenameTemplate: '[absolute-resource-path]',
   },
 
