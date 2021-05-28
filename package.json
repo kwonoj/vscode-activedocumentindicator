@@ -5,7 +5,7 @@
   "publisher": "ojkwon",
   "author": "OJ Kwon <kwon.ohjoong@gmail.com>",
   "license": "MIT",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/kwonoj/vscode-activedocumentindicator.git"
