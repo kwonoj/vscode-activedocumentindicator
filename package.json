@@ -14,7 +14,7 @@
     "url": "https://github.com/kwonoj/vscode-activedocumentindicator/issues"
   },
   "engines": {
-    "vscode": "^1.33.0"
+    "vscode": "^1.56.0"
   },
   "categories": [
     "Other"
