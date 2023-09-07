@@ -1,3 +1,8 @@
+### Deprecated
+
+VScode introduced native supports via https://code.visualstudio.com/updates/v1_82#_dim-unfocused-editors-and-terminals. 
+Encourage to use native features instead. Thanks for using this extension.
+
 # Active document indicator
 
 VS Code extension to dim inactive document to find current working document easily.
